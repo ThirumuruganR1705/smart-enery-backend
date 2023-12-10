@@ -8,7 +8,7 @@ const Papa = require("papaparse");
 
 exports.fetchSolarData = async (req, res) => {
   try {
-    let token = "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";
+    let token = process.env.GITHUB_TOKEN;
     let month = req?.query?.month;
     console.log(month)
     // Fetch CSV data from GitHub
