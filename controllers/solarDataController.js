@@ -8,16 +8,33 @@ const Papa = require("papaparse");
 
 exports.fetchSolarData = async (req, res) => {
   try {
-    let token = "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";
+    let token = "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";
+    let month = req?.query?.month;
+    console.log(month)
     // Fetch CSV data from GitHub
-    const response = await axios.get(
-      "https://raw.githubusercontent.com/ash1435/data/main/DAILY.csv",
-      {
-        headers: {
-          Authorization: `token ${token}`,
-        },
-      }
-    );
+    let response;
+
+    if (month) {
+      console.log(`https://raw.githubusercontent.com/ash1435/data/main/${month}.csv`)
+      response = await axios.get(
+        `https://raw.githubusercontent.com/ash1435/data/main/${month}.csv`,
+        {
+          headers: {
+            Authorization: `token ${token}`,
+          },
+        }
+      );
+    } else {
+      response = await axios.get(
+        // "https://api.github.com/repos/ash1435/data",
+        "https://raw.githubusercontent.com/ash1435/data/main/DAILY.csv",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+    }
 
     const csvData = response.data;
 
@@ -42,8 +59,9 @@ exports.fetchSolarData = async (req, res) => {
     }
     jsonData = updatedData;
 
-    // Save data to MongoDB
     const result = await SolarData.insertMany(jsonData);
+
+    // Save data to MongoDB
     console.log("inserted data successfully");
     res.status(200).json({ message: "Data saved to MongoDB", result });
   } catch (error) {
@@ -60,6 +78,23 @@ exports.readSolarData = async (req, res) => {
     }
 
     const data = await SolarData.find(query);
+    res.status(200).json({ data });
+  } catch (error) {
+    console.error("Error:", error.message);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+exports.filterData = async (req, res) => {
+  try {
+    
+    let {startdate,enddate} = req.body;
+    console.log(startdate);
+    const data = await SolarData.find({$and: [
+      {"Time": { $gt: startdate+"00:00:00" }},
+      {"Time": { $lt: enddate+"23:59:00" }}
+    ]
+  });
     res.status(200).json({ data });
   } catch (error) {
     console.error("Error:", error.message);

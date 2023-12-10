@@ -8,6 +8,6 @@ module.exports = function (app) {
 
   app.get("/api/solar/fetchSolarData", controller.fetchSolarData);
   app.get("/api/solar/data", controller.readSolarData)
-
+  app.post("/api/solar/filterData", controller.filterData)
 
 };
