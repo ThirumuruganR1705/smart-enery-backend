@@ -34,11 +34,17 @@ require("./db");
 
 // routes
 require("./routes/solarDataRoutes")(app);
+require("./routes/userRoutes")(app);
 
 // simple route
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to backend of smart energy dashboard" });
 });
+
+app.post("/", (req, res) => {
+  console.log(req.body)
+  res.json(req.body)
+})
 
 app.get('/fetch-and-save', async (req, res) => {
   try {

@@ -2,7 +2,7 @@ require("dotenv").config();
 const config = process.env;
 const db = require("../models");
 const SolarData = db.solarData;
-const solarDataSchema = db.solarDataSchema;
+// const solarDataSchema = db.solarDataSchema;
 const axios = require("axios");
 const Papa = require("papaparse");
 
