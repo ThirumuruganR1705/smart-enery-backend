@@ -10,7 +10,7 @@ exports.fetchSolarData = async (req, res) => {
   try {
     let token = process.env.GITHUB_TOKEN;
     let month = req?.query?.month;
-    console.log(month)
+    // console.log(month)
     // Fetch CSV data from GitHub
     let response;
 
